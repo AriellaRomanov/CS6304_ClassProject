@@ -1,13 +1,13 @@
 #include "graph.h"
 
-Node::Node()
+Graph::Node::Node()
 	: produced(0),
 	consumed(0)
 {
 
 }
 
-Node::Node(const Node& copy)
+Graph::Node::Node(const Node& copy)
 	: produced(copy.produced),
 	consumed(copy.consumed)
 {
@@ -26,7 +26,7 @@ Graph::Graph(const Graph& copy)
 
 	for (auto& vect : copy.edges)
 	{
-		edges.push_back();
+		edges.emplace_back();
 		for (auto& e : vect)
 			edges.back().push_back(e);
 	}

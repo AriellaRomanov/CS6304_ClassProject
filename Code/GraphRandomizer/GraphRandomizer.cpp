@@ -122,11 +122,11 @@ void DoGraphStressTest()
 			} while (!stop_conditions_met);
 
 			Log("Number of edges cut: " + std::to_string(starting_edges - main_graph.GetEdgeCount()) + " (of " + std::to_string(starting_edges) + ")");
-			Log("Ending component count: " + main_graph.GetComponentCount() + " (of " + std::to_string(starting_components) + ")");
+			Log("Ending component count: " + std::to_string(main_graph.GetComponentCount()) + " (of " + std::to_string(starting_components) + ")");
 			Log("Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied) + "%)");
 			
 			std::string output_graph = graph_file + ".output";
-			sub_graph.Write(output_graph);
+			main_graph.Write(output_graph);
 			Log("Ending graph written to: " + output_graph);
 		}
 	}
