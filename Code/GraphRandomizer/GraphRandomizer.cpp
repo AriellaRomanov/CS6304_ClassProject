@@ -58,7 +58,7 @@ void RandomizeGraph()
 		"MinNodeProduction",
 		"MaxNodeProduction",
 		"MinNodeConsumption",
-		"MaxNodeComsumption"
+		"MaxNodeConsumption"
 	};
 
 	if (HasRequiredConfiguration(required_keys))
