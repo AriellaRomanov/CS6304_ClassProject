@@ -63,7 +63,10 @@ Graph::Graph(const std::string& filename)
 		nodes.reserve(size);
 		edges.reserve(size);
 		for (long i = 0; i < size; i++)
+		{
+			std::cout << "i: " << i << " -> " << size - i << std::endl;
 			edges.at(i).reserve(size - i);
+		}
 
 		for (int i = 0; i < size; i++)
 		{
