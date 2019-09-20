@@ -28,17 +28,13 @@ int main(int argc, char** argv)
 		std::cout << "Missing config file parameter" << std::endl;
 	else
 	{
-
 		if (ReadConfiguration(argv[1], configuration))
 		{
-			for (const auto& pair : configuration)
-				Log(pair.first + " = " + pair.second);
+			if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Randomize")
+				RandomizeGraph();
+			else
+				DoGraphStressTest();
 		}
-
-		if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Randomize")
-			RandomizeGraph();
-		else
-			DoGraphStressTest();
 	}
 
 	std::cout << "Program Done." << std::endl;
@@ -158,7 +154,7 @@ bool ReadConfiguration(const std::string& filename, config_t& config)
 	std::ifstream file(filename);
 	if (!file.is_open())
 	{
-		Log("Unable to read config file: settings.config");
+		Log("Unable to read config file: " + filename);
 		return false;
 	}
 	else

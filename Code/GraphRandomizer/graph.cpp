@@ -41,6 +41,8 @@ Graph::Graph(Graph&& source)
 
 Graph::Graph(const std::string& filename)
 {
+	std::cout << "Reading graph file" << std::endl;
+
 	std::ifstream file(filename);
 	if (!file.is_open())
 		Log("Unable to read graph file: " + filename);
@@ -50,10 +52,14 @@ Graph::Graph(const std::string& filename)
 
 		std::string line;
 		while (std::getline(file, line))
+		{
+			std::cout << "line: " << line << std::endl;
 			lines.push_back(line);
+		}
 		file.close();
 
 		auto size = static_cast<long>(lines.size());
+		std::cout << "size: " << size << std::endl;
 		nodes.reserve(size);
 		edges.reserve(size);
 		for (long i = 0; i < size; i++)
@@ -61,6 +67,7 @@ Graph::Graph(const std::string& filename)
 
 		for (int i = 0; i < size; i++)
 		{
+			std::cout << "i: " << i << std::endl;
 			auto components = split(lines.at(i), ",");
 			auto _size = static_cast<long>(components.size());
 			
@@ -71,14 +78,18 @@ Graph::Graph(const std::string& filename)
 
 			for (int j = 2; j < _size; j++)
 			{
+				std::cout << "j: " << j << std::endl;
 				auto neighbor = components.at(j);
 				auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
 				auto col = (i < stoi(neighbor)) ? i : stoi(neighbor);
+
+				std::cout << "(row, col): (" << row << ", " << col << ")" << std::endl;
 				edges.at(row).at(col) = true;
 			}
 		}
 	}
 
+	std::cout << "Done reading graph file" << std::endl;
 	Write("");
 }
 
@@ -127,6 +138,8 @@ void Graph::CutEdges(const double percent)
 
 void Graph::Write(const std::string& filename) const
 {
+	std::cout << "Writing..." << std::endl;
+
 	long i = 0;
 	for (const auto& node : nodes)
 		std::cout << "Node" << i++ << " Produces: " << node.produced << " Consumed: " << node.consumed << std::endl;
@@ -138,6 +151,7 @@ void Graph::Write(const std::string& filename) const
 			std::cout << edges.at(row).at(col) << " ";
 		std::cout << "\n";
 	}
+	std::cout << "Done writing" << std::endl;
 }
 
 
