@@ -23,7 +23,7 @@ class Graph
 public:
 	Graph();
 	Graph(const Graph& copy);
-	Graph(Graph&& source) noexcept;
+	Graph(Graph&& source);
 	Graph(const std::string& filename);
 	~Graph();
 

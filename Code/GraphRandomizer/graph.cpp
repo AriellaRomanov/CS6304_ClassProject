@@ -65,15 +65,15 @@ Graph::Graph(const std::string& filename)
 			auto _size = static_cast<long>(components.size());
 			
 			Node n;
-			n.consumed = (_size > 1) ? components.at(0) : 0;
-			n.produced = (_size > 2) ? components.at(1) : 0;
+			n.consumed = (_size > 1) ? stod(components.at(0)) : 0;
+			n.produced = (_size > 2) ? stod(components.at(1)) : 0;
 			nodes.at(i) = n;
 
 			for (int j = 2; j < _size; j++)
 			{
 				auto neighbor = components.at(j);
-				auto row = (i > neighbor) ? i : neighbor;
-				auto col = (i < neighbor) ? i : neighbor;
+				auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
+				auto col = (i < stoi(neighbor)) ? i : stoi(neighbor);
 				edges.at(row).at(col) = true;
 			}
 		}
