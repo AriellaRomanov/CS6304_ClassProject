@@ -12,7 +12,7 @@ std::vector<std::string> split(std::string value, const std::string& delim, long
 void Log(const std::string& message);
 
 using config_t = std::map<std::string, std::string>;
-bool ReadConfiguration(config_t& config);
+bool ReadConfiguration(const std::string& filename, config_t& config);
 bool DoesConfigKeyExist(const std::string& key);
 double GetConfigValue(const std::string& key);
 std::string GetConfigString(const std::string& key);
@@ -27,16 +27,22 @@ int main(int argc, char** argv)
 	std::cout << "Program Start." << std::endl;
 	srand(time(NULL));
 
-	if (ReadConfiguration(configuration))
-	{
-		for (const auto& pair : configuration)
-			Log(pair.first + " = " + pair.second);
-	}
-
-	if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Randomize")
-		RandomizeGraph();
+	if (argc < 2)
+		std::cout << "Missing config file parameter" << std::endl;
 	else
-		DoGraphStressTest();
+	{
+
+		if (ReadConfiguration(argv[1], configuration))
+		{
+			for (const auto& pair : configuration)
+				Log(pair.first + " = " + pair.second);
+		}
+
+		if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Randomize")
+			RandomizeGraph();
+		else
+			DoGraphStressTest();
+	}
 
 	std::cout << "Program Done." << std::endl;
 	return 0;
@@ -150,9 +156,9 @@ bool HasRequiredConfiguration(const std::vector<std::string>& keys)
 	return has_all_keys;
 }
 
-bool ReadConfiguration(config_t& config)
+bool ReadConfiguration(const std::string& filename, config_t& config)
 {
-	std::ifstream file("settings.config");
+	std::ifstream file(filename);
 	if (!file.is_open())
 	{
 		Log("Unable to read config file: settings.config");
