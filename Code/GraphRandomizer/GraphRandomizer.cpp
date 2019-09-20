@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <random>
+#include <iostream>
 
 #include "graph.h"
 
