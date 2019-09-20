@@ -72,8 +72,8 @@ Graph::Graph(const std::string& filename)
 			for (int j = 2; j < _size; j++)
 			{
 				auto neighbor = components.at(j);
-				auto row = max(i, neighbor);
-				auto col = min(i, neighbor);
+				auto row = (i > neighbor) ? i : neighbor;
+				auto col = (i < neighbor) ? i : neighbor;
 				edges.at(row).at(col) = true;
 			}
 		}
