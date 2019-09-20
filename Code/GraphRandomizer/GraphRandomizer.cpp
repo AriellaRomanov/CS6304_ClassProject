@@ -8,9 +8,6 @@
 
 #include "graph.h"
 
-std::vector<std::string> split(std::string value, const std::string& delim, long max_pieces = -1);
-void Log(const std::string& message);
-
 using config_t = std::map<std::string, std::string>;
 bool ReadConfiguration(const std::string& filename, config_t& config);
 bool DoesConfigKeyExist(const std::string& key);
@@ -197,37 +194,5 @@ std::string GetConfigString(const std::string& key)
 	return "";
 }
 
-std::vector<std::string> split(std::string value, const std::string& delim, long max_pieces)
-{
-	std::vector<std::string> pieces;
-	if (max_pieces == 1)
-		pieces.push_back(value);
-	else
-	{
-		auto idx = value.find_first_of(delim);
-		if (idx == std::string::npos)
-			pieces.push_back(value);
-		else
-		{
-			pieces.push_back(value.substr(0, idx));
-			auto _pieces = split(value.substr(idx + delim.length()), delim, max_pieces - 1);
-			for (auto& _value : _pieces)
-				pieces.push_back(_value);
-		}
-	}
-	return std::move(pieces);
-}
 
-void Log(const std::string& message)
-{
-	std::cout << message << std::endl;
 
-	std::ofstream file("runtime.log");
-	if (!file.is_open())
-		std::cout << "Unable access log file." << std::endl;
-	else
-	{
-		file << message << std::endl;
-		file.close();
-	}
-}

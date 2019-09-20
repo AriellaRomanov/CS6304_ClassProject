@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
 #include <fstream>
+#include <iostream>
+
+std::vector<std::string> split(std::string value, const std::string& delim, long max_pieces = -1);
+void Log(const std::string& message);
 
 class Graph
 {
@@ -19,7 +23,7 @@ class Graph
 public:
 	Graph();
 	Graph(const Graph& copy);
-	Graph(Graph&& source);
+	Graph(Graph&& source) noexcept;
 	Graph(const std::string& filename);
 	~Graph();
 
