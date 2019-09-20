@@ -178,7 +178,10 @@ bool ReadConfiguration(const std::string& filename, config_t& config)
 bool DoesConfigKeyExist(const std::string& key)
 {
 	auto itr = configuration.find(key);
-	return (itr != configuration.end());
+	bool exists = (itr != configuration.end());
+	if (!exists)
+		Log("Missing " + key + " from configuration.");
+	return exists;
 }
 
 double GetConfigValue(const std::string& key)
