@@ -24,10 +24,10 @@ Graph::Graph(const Graph& copy)
 	for (auto& n : copy.nodes)
 		nodes.push_back(n);
 
-	for (auto& vect : copy.edges)
+	for (const auto& vect : copy.edges)
 	{
 		edges.emplace_back();
-		for (auto& e : vect)
+		for (const auto& e : vect)
 			edges.back().push_back(e);
 	}
 }
