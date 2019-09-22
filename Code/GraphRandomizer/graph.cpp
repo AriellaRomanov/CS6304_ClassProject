@@ -108,8 +108,8 @@ Graph::Graph(const std::string& filename)
 			for (int j = 2; j < _size; j++)
 			{
 				auto neighbor = components.at(j);
-				auto row = (i < stoi(neighbor)) ? i : stoi(neighbor);
-				auto col = (i > stoi(neighbor)) ? i : stoi(neighbor);
+				auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
+				auto col = (i < stoi(neighbor)) ? i : stoi(neighbor);
 
 				std::cout << "(row, col): (" << row << ", " << col << ")" << std::endl;
 				edges.at(row).at(col) = true;
