@@ -86,6 +86,7 @@ Graph::Graph(const std::string& filename)
 				SetEdge(i, stoi(components.at(j)));
 		}
 	}
+	Write("");
 }
 
 Graph::~Graph()
