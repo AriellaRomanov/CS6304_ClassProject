@@ -76,8 +76,8 @@ Graph::Graph(const std::string& filename)
 		for (long i = 0; i < size; i++)
 		{
 			edges.emplace_back();
-			edges.at(i).reserve(size - i);
-			for (long j = 0; j < size - i; j++)
+			edges.at(i).reserve(i + 1);
+			for (long j = 0; j < i + 1; j++)
 				edges.at(i).emplace_back(false);
 		}
 
