@@ -139,15 +139,15 @@ void Graph::RandomizeNodes(const double min_prod, const double max_prod, const d
 
 bool Graph::IsEdge(const long row, const long col) const
 {
-	auto _row = (row > stoi(col)) ? row : stoi(col);
-	auto _col = (row < stoi(col)) ? row : stoi(col);
+	auto _row = (row > col) ? row : col;
+	auto _col = (row < col) ? row : col;
 	return edges.at(_row).at(_col);
 }
 
 void Graph::SetEdge(const long row, const long col, const bool edge)
 {
-	auto _row = (row > stoi(col)) ? row : stoi(col);
-	auto _col = (row < stoi(col)) ? row : stoi(col);
+	auto _row = (row > col) ? row : col;
+	auto _col = (row < col) ? row : col;
 	edges.at(_row).at(_col) = edge;
 }
 
