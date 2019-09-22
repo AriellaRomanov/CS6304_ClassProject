@@ -11,6 +11,7 @@ class Graph
 	struct Node
 	{
 		Node();
+		Node(const long _produced, const long _consumed);
 		Node(const Node& copy);
 
 		double produced;

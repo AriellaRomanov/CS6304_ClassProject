@@ -7,6 +7,13 @@ Graph::Node::Node()
 
 }
 
+Graph::Node::Node(const long _produced, const long _consumed)
+	: produced(_produced),
+	consumed(_consumed)
+{
+
+}
+
 Graph::Node::Node(const Node& copy)
 	: produced(copy.produced),
 	consumed(copy.consumed)
@@ -60,17 +67,18 @@ Graph::Graph(const std::string& filename)
 
 		auto size = static_cast<long>(lines.size());
 		std::cout << "size: " << size << std::endl;
+		
 		nodes.reserve(size);
+		for (long i = 0; i < size; i++)
+			nodes.emplace_back();
+
 		edges.reserve(size);
-
-
 		for (long i = 0; i < size; i++)
 		{
-			std::cout << "i: " << i << " -> " << size - i << std::endl;
 			edges.emplace_back();
 			edges.at(i).reserve(size - i);
 			for (long j = 0; j < size - i; j++)
-				edges.emplace_back(false);
+				edges.at(i).emplace_back(false);
 		}
 
 		for (int i = 0; i < size; i++)
