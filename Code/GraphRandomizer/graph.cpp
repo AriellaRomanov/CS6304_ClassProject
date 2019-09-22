@@ -81,6 +81,16 @@ Graph::Graph(const std::string& filename)
 				edges.at(i).emplace_back(false);
 		}
 
+
+		for (int r = 0; r < static_cast<long>(edges.size()); r++)
+		{
+			std::cout << r << ": ";
+			for (int c = 0; c < static_cast<long>(edges.at(r).size()); c++)
+				std::cout << edges.at(r).at(c) << " ";
+			std::cout << std::endl;
+		}
+
+
 		for (int i = 0; i < size; i++)
 		{
 			std::cout << "i: " << i << std::endl;
