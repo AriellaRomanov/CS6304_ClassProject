@@ -78,11 +78,12 @@ Graph::Graph(const std::string& filename)
 			std::cout << "i: " << i << std::endl;
 			auto components = split(lines.at(i), ",");
 			auto _size = static_cast<long>(components.size());
+			std::cout << "_size: " << _size << std::endl;
 			
 			Node n;
 			n.consumed = (_size > 1) ? stod(components.at(0)) : 0;
 			n.produced = (_size > 2) ? stod(components.at(1)) : 0;
-			nodes.at(i) = n;
+			nodes.emplace_back(n);
 
 			for (int j = 2; j < _size; j++)
 			{
