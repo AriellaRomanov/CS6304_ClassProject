@@ -81,7 +81,10 @@ Graph::Graph(const std::string& filename)
 				edges.at(i).emplace_back(false);
 		}
 
-
+		std::cout << "   ";
+		for (int r = 0; r < static_cast<long>(edges.size()); r++)
+			std::cout << r << " ";
+		std::cout << std::endl;
 		for (int r = 0; r < static_cast<long>(edges.size()); r++)
 		{
 			std::cout << r << ": ";
@@ -89,14 +92,13 @@ Graph::Graph(const std::string& filename)
 				std::cout << edges.at(r).at(c) << " ";
 			std::cout << std::endl;
 		}
+		std::cout << "----------------------------" << std::endl;
 
 
 		for (int i = 0; i < size; i++)
 		{
-			std::cout << "i: " << i << std::endl;
 			auto components = split(lines.at(i), ",");
 			auto _size = static_cast<long>(components.size());
-			std::cout << "_size: " << _size << std::endl;
 			
 			Node n;
 			n.consumed = (_size > 1) ? stod(components.at(0)) : 0;
@@ -105,7 +107,6 @@ Graph::Graph(const std::string& filename)
 
 			for (int j = 2; j < _size; j++)
 			{
-				std::cout << "j: " << j << std::endl;
 				auto neighbor = components.at(j);
 				auto row = (i < stoi(neighbor)) ? i : stoi(neighbor);
 				auto col = (i > stoi(neighbor)) ? i : stoi(neighbor);
