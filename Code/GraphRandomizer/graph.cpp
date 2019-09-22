@@ -172,10 +172,10 @@ void Graph::Write(const std::string& filename) const
 	for (const auto& node : nodes)
 		std::cout << "Node" << i++ << " Produces: " << node.produced << " Consumed: " << node.consumed << std::endl;
 
-	long size = static_cast<long>(nodes.size());
+	long size = static_cast<long>(edges.size());
 	for (long row = 0; row < size; row++)
 	{
-		for (long col = 0; col < row + 1; col++)
+		for (long col = 0; col < static_cast<long>(edges.at(row).size()); col++)
 			std::cout << edges.at(row).at(col) << " ";
 		std::cout << "\n";
 	}
