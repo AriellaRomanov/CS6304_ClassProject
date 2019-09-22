@@ -48,8 +48,6 @@ Graph::Graph(Graph&& source)
 
 Graph::Graph(const std::string& filename)
 {
-	std::cout << "Reading graph file" << std::endl;
-
 	std::ifstream file(filename);
 	if (!file.is_open())
 		Log("Unable to read graph file: " + filename);
@@ -59,15 +57,11 @@ Graph::Graph(const std::string& filename)
 
 		std::string line;
 		while (std::getline(file, line))
-		{
-			std::cout << "line: " << line << std::endl;
 			lines.push_back(line);
-		}
 		file.close();
 
 		auto size = static_cast<long>(lines.size());
-		std::cout << "size: " << size << std::endl;
-		
+
 		nodes.reserve(size);
 		for (long i = 0; i < size; i++)
 			nodes.emplace_back();
@@ -81,45 +75,19 @@ Graph::Graph(const std::string& filename)
 				edges.at(i).emplace_back(false);
 		}
 
-		std::cout << "   ";
-		for (int r = 0; r < static_cast<long>(edges.size()); r++)
-			std::cout << r << " ";
-		std::cout << std::endl;
-		for (int r = 0; r < static_cast<long>(edges.size()); r++)
-		{
-			std::cout << r << ": ";
-			for (int c = 0; c < static_cast<long>(edges.at(r).size()); c++)
-				std::cout << edges.at(r).at(c) << " ";
-			std::cout << std::endl;
-		}
-		std::cout << "----------------------------" << std::endl;
-
-
 		for (int i = 0; i < size; i++)
 		{
 			auto components = split(lines.at(i), ",");
 			auto _size = static_cast<long>(components.size());
-			
-			Node n;
-			n.consumed = (_size > 1) ? stod(components.at(0)) : 0;
-			n.produced = (_size > 2) ? stod(components.at(1)) : 0;
-			nodes.emplace_back(n);
+
+			double produced = (_size > 1) ? stod(components.at(0)) : 0;
+			double consumed = (_size > 2) ? stod(components.at(1)) : 0;
+			nodes.emplace_back(produced, consumed);
 
 			for (int j = 2; j < _size; j++)
-			{
-				auto neighbor = components.at(j);
 				SetEdge(i, stoi(components.at(j)));
-				/*auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
-				auto col = (i < stoi(neighbor)) ? i : stoi(neighbor);
-
-				std::cout << "(row, col): (" << row << ", " << col << ")" << std::endl;
-				edges.at(row).at(col) = true;*/
-			}
 		}
 	}
-
-	std::cout << "Done reading graph file" << std::endl;
-	Write("");
 }
 
 Graph::~Graph()
@@ -159,10 +127,9 @@ void Graph::RemoveEdge(const long row, const long col)
 long Graph::GetEdgeCount() const
 {
 	long edge_count = 0;
-	auto size = static_cast<long>(nodes.size());
 
-	for (int row = 0; row < size; row++)
-		for (int col = 0; col < row; col++)
+	for (int row = 0; row < static_cast<long>(edges.size()); row++)
+		for (int col = 0; col < static_cast<long>(edges.at(row).size()); col++)
 			if (edges.at(row).at(col))
 				edge_count++;
 
