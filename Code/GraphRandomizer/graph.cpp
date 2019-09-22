@@ -63,8 +63,6 @@ Graph::Graph(const std::string& filename)
 		auto size = static_cast<long>(lines.size());
 
 		nodes.reserve(size);
-		for (long i = 0; i < size; i++)
-			nodes.emplace_back();
 
 		edges.reserve(size);
 		for (long i = 0; i < size; i++)
