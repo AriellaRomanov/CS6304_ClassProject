@@ -108,7 +108,7 @@ Graph::Graph(const std::string& filename)
 				std::cout << "j: " << j << std::endl;
 				auto neighbor = components.at(j);
 				auto row = (i < stoi(neighbor)) ? i : stoi(neighbor);
-				auto col = (i > stoi(sneighbor)) ? i : stoi(neighbor);
+				auto col = (i > stoi(neighbor)) ? i : stoi(neighbor);
 
 				std::cout << "(row, col): (" << row << ", " << col << ")" << std::endl;
 				edges.at(row).at(col) = true;
