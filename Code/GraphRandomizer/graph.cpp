@@ -178,7 +178,7 @@ void Graph::Write(const std::string& filename) const
 {
 	std::cout << "Writing..." << std::endl;
 
-	long i = 0;
+	/*long i = 0;
 	for (const auto& node : nodes)
 		std::cout << "Node" << i++ << " Produces: " << node.produced << " Consumed: " << node.consumed << std::endl;
 
@@ -188,7 +188,25 @@ void Graph::Write(const std::string& filename) const
 		for (long col = 0; col < static_cast<long>(edges.at(row).size()); col++)
 			std::cout << edges.at(row).at(col) << " ";
 		std::cout << "\n";
+	}*/
+
+	std::ofstream file(filename.c_str());
+	if (!file.is_open())
+		Log("Unable to open file to write graph: " + filename);
+	else
+	{
+		long size = static_cast<long>(edges.size());
+		for (long n = 0; n < size; n++)
+		{
+			file << nodes.at(n).produced << "," << nodes.at(n).consumed;
+			for (long i = 0; i < size; i++)
+				if (IsEdge(n, i))
+					file << "," << i;
+			if (n < size - 1)
+				file << "\n";
+		}
 	}
+
 	std::cout << "Done writing" << std::endl;
 }
 
