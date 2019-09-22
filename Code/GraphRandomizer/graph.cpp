@@ -95,7 +95,32 @@ Graph::~Graph()
 
 void Graph::RandomizeEdges(const long num_swaps)
 {
+	std::vector<std::pair<long, long>> _edges;
+	for (int row = 0; row < static_cast<long>(edges.size()); row++)
+	{
+		for (int col = 0; col < static_cast<long>(edges.at(row).size()); col++)
+		{
+			if (edges.at(row).at(col))
+			{
+				_edges.emplace_back(row, col);
+				edges.at(row).at(col) = false;
+			}
+		}
+	}
 
+	long edge_count = static_cast<long>(_edges.size());
+	for (int i = 0; i < num_swaps; i++)
+	{
+		auto idx1 = rand() % edge_count;
+		auto idx2 = rand() % edge_count;
+
+		auto temp = edge1.second;
+		_edges.at(idx1).second = _edges.at(idx2).second;
+		_edges.at(idx2).second = temp;
+	}
+
+	for (const auto& e : _edges)
+		SetEdge(e.first, e.second);
 }
 
 void Graph::RandomizeNodes(const double min_prod, const double max_prod, const double min_cons, const double max_cons)
