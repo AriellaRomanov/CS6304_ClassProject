@@ -108,11 +108,12 @@ Graph::Graph(const std::string& filename)
 			for (int j = 2; j < _size; j++)
 			{
 				auto neighbor = components.at(j);
-				auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
+				SetEdge(i, stoi(components.at(j)));
+				/*auto row = (i > stoi(neighbor)) ? i : stoi(neighbor);
 				auto col = (i < stoi(neighbor)) ? i : stoi(neighbor);
 
 				std::cout << "(row, col): (" << row << ", " << col << ")" << std::endl;
-				edges.at(row).at(col) = true;
+				edges.at(row).at(col) = true;*/
 			}
 		}
 	}
@@ -134,6 +135,25 @@ void Graph::RandomizeEdges(const long num_swaps)
 void Graph::RandomizeNodes(const double min_prod, const double max_prod, const double min_cons, const double max_cons)
 {
 
+}
+
+bool Graph::IsEdge(const long row, const long col) const
+{
+	auto _row = (row > stoi(col)) ? row : stoi(col);
+	auto _col = (row < stoi(col)) ? row : stoi(col);
+	return edges.at(_row).at(_col);
+}
+
+void Graph::SetEdge(const long row, const long col, const bool edge)
+{
+	auto _row = (row > stoi(col)) ? row : stoi(col);
+	auto _col = (row < stoi(col)) ? row : stoi(col);
+	edges.at(_row).at(_col) = edge;
+}
+
+void Graph::RemoveEdge(const long row, const long col)
+{
+	SetEdge(row, col, false);
 }
 
 long Graph::GetEdgeCount() const

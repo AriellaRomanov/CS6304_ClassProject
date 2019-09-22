@@ -31,6 +31,9 @@ public:
 	void RandomizeEdges(const long num_swaps);
 	void RandomizeNodes(const double min_prod, const double max_prod, const double min_cons, const double max_cons);
 
+	bool IsEdge(const long row, const long col) const;
+	void SetEdge(const long row, const long col, const bool edge = true);
+	void RemoveEdge(const long row, const long col);
 	long GetEdgeCount() const;
 	long GetComponentCount() const;
 	double GetAveragePowerPercentageSupplied() const;
