@@ -114,7 +114,7 @@ void Graph::RandomizeEdges(const long num_swaps)
 		auto idx1 = rand() % edge_count;
 		auto idx2 = rand() % edge_count;
 
-		auto temp = edge1.second;
+		auto temp = _edges.at(idx1).second;
 		_edges.at(idx1).second = _edges.at(idx2).second;
 		_edges.at(idx2).second = temp;
 	}
