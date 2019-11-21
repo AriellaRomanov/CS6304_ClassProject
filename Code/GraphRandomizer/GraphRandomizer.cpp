@@ -130,6 +130,7 @@ void DoGraphStressTest()
 				Log("DoGraphStressTest Function: Analytics complete.");
 				std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
 				std::cout << "  Component Count: " << graph_data.num_components << std::endl;
+				std::cout << "  Edge Count: " << graph_data.num_edges << std::endl;
 			}
 
 			Log("Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
