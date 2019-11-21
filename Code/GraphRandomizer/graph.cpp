@@ -226,6 +226,7 @@ std::vector<Graph::component_t> Graph::GetComponents_BFS()
 
 		if (static_cast<long>(component.size()) > 0)
 			component_list.push_back(component);
+		start_node = get_next_start_node();
 	}
 	Log("End -> Graph::GetComponents_BFS");
 	return component_list;
