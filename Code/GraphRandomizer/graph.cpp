@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <queue>
 
 Graph::Node::Node()
 	: produced(0),
@@ -9,14 +10,16 @@ Graph::Node::Node()
 
 Graph::Node::Node(const long _produced, const long _consumed)
 	: produced(_produced),
-	consumed(_consumed)
+	consumed(_consumed),
+	visited(false)
 {
 
 }
 
 Graph::Node::Node(const Node& copy)
 	: produced(copy.produced),
-	consumed(copy.consumed)
+	consumed(copy.consumed),
+	visited(copy.visited)
 {
 
 }
@@ -142,11 +145,6 @@ void Graph::SetEdge(const long row, const long col, const bool edge)
 	edges.at(_row).at(_col) = edge;
 }
 
-void Graph::RemoveEdge(const long row, const long col)
-{
-	SetEdge(row, col, false);
-}
-
 long Graph::GetEdgeCount() const
 {
 	long edge_count = 0;
@@ -159,19 +157,108 @@ long Graph::GetEdgeCount() const
 	return edge_count;
 }
 
-long Graph::GetComponentCount() const
-{
-	return 1;
-}
-
-double Graph::GetAveragePowerPercentageSupplied() const
-{
-	return 1;
-}
-
 void Graph::CutEdges(const double percent)
 {
+	std::vector<std::pair<long, long>> edge_list;
 
+	for (int row = 0; row < static_cast<long>(edges.size()); row++)
+		for (int col = 0; col < static_cast<long>(edges.at(row).size()); col++)
+			if (edges.at(row).at(col))
+				edge_list.emplace_back(row, col);
+
+	long edge_count = static_cast<long>(edge_list.size());
+	long cut_count = edge_count * percent;
+
+	for (int i = 0; i < cut_count; i++)
+	{
+		auto idx = rand() % static_cast<long>(edge_list.size());
+		auto row = edge_list.at(idx).first;
+		auto col = edge_list.at(idx).second;
+		edges.at(row).at(col) = false;
+		edge_list.erase(edge_list.begin() + idx);
+	}
+}
+
+std::vector<Graph::component_t> Graph::GetComponents_BFS()
+{
+	for (auto& n : nodes)
+		n.visited = false;
+
+	auto get_next_start_node = [this]()->long
+	{
+		for (int i = 0; i < static_cast<long>(nodes.size()); i++)
+			if (!nodes.at(i).visited)
+				return i;
+		return -1;
+	};
+
+	std::vector<component_t> component_list;
+
+	int start_node = get_next_start_node();
+	while (start_node != -1)
+	{
+		component_t component;
+
+		// BFS
+		std::queue<long> queue;
+		auto visit = [this](node_id)
+		{
+			nodes.at(node_id).visited = true;
+			queue.push(node_id);
+			component.push_back(node_id);
+		};
+		visit(start_node);
+
+		while (static_cast<long>(queue.size()) > 0)
+		{
+			auto current_node = queue.front();
+			queue.pop();
+
+			for (int i = 0; i < static_cast<long>(nodes.size()); i++)
+			{
+				if (i != current_node && !nodes.at(i).visited && IsEdge(current_node, i))
+					visit(i);
+			}
+		}
+
+		if (static_cast<long>(component.size()) > 0)
+			component_list.push_back(component);
+	}
+	return component_list;
+}
+
+std::vector<Graph::component_t> Graph::GetComponents_DFS()
+{
+	return GetComponents_BFS();
+}
+
+Graph::GraphAnalytics Graph::RunAnalytics()
+{
+	GraphAnalytics data;
+
+	auto components = GetComponents_BFS();
+	data.num_components = components.size();
+	data.num_nodes = nodes.size();
+	data.num_edges = GetEdgeCount();
+
+	data.num_components_powered = 0;
+	data.avg_power_percentage = 0;
+	for (auto& c : components)
+	{
+		double produced = 0;
+		double consumed = 0;
+		for (auto& n : c)
+		{
+			produced += nodes.at(n).produced;
+			consumed += nodes.at(n).consumed;
+		}
+		if (produced >= consumed)
+			data.num_components_powered++;
+		data.avg_power_percentage += (consumed / produced);
+	}
+	data.avg_power_percentage /= static_cast<double>(components.size());
+
+	return data;
 }
 
 void Graph::Write(const std::string& filename) const

@@ -89,7 +89,8 @@ void DoGraphStressTest()
 
 	std::vector<std::string> required_keys{
 		"GraphFilename",
-		"PowerSuppliedThreshold"
+		"PowerSuppliedThreshold",
+		"PercentageOfEdgesToCut"
 	};
 
 	if (HasRequiredConfiguration(required_keys))
@@ -98,31 +99,30 @@ void DoGraphStressTest()
 		double power_threshold = GetConfigValue("PowerSuppliedThreshold");
 		double edge_cut_percent = GetConfigValue("PercentageOfEdgesToCut");
 		
-		if (power_threshold == 0)
-			Log("Cannot do operation with PowerSuppliedThreshold at 0");
-		else if (edge_cut_percent == 0)
-			Log("Cannot do operation with PercentageOfEdgesToCut at 0");
+		if (power_threshold < 0 || power_threshold > 1)
+			Log("Cannot do operation with PowerSuppliedThreshold < 0 or PowerSuppliedThreshold > 1");
+		else if (edge_cut_percent <= 0 || edge_cut_percent > 1)
+			Log("Cannot do operation with PercentageOfEdgesToCut <= 0 or PercentageOfEdgesToCut > 1");
 		else
 		{
 			Graph main_graph(graph_file);
-			long starting_edges = main_graph.GetEdgeCount();
-			long starting_components = main_graph.GetComponentCount();
-			long starting_power_supplied = main_graph.GetAveragePowerPercentageSupplied();
+			auto graph_data = main_graph.RunAnalytics();
+			long starting_edges = graph_data.num_edges;
+			long starting_components = graph_data.num_components;
+			long starting_power_supplied = graph_data.avg_power_percentage;
 
 			bool stop_conditions_met = false;
 			double power_supplied = power_threshold;
 
-			do
+			while (graph_data.avg_power_percentage > power_threshold)
 			{
-				power_supplied = main_graph.GetAveragePowerPercentageSupplied();
-				stop_conditions_met = (power_supplied < power_threshold);
-				if (!stop_conditions_met)
-					main_graph.CutEdges(edge_cut_percent);
-			} while (!stop_conditions_met);
+				main_graph.CutEdges(edge_cut_percent);
+				graph_data = main_graph.RunAnalytics();
+			}
 
-			Log("Number of edges cut: " + std::to_string(starting_edges - main_graph.GetEdgeCount()) + " (of " + std::to_string(starting_edges) + ")");
-			Log("Ending component count: " + std::to_string(main_graph.GetComponentCount()) + " (of " + std::to_string(starting_components) + ")");
-			Log("Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied) + "%)");
+			Log("Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
+			Log("Ending component count: " + std::to_string(graph_data.num_components) + " (of " + std::to_string(starting_components) + ")");
+			Log("Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied * 100) + "%)");
 			
 			std::string output_graph = graph_file + ".output";
 			main_graph.Write(output_graph);

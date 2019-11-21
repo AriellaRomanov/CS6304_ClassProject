@@ -17,6 +17,7 @@ class Graph
 
 		double produced;
 		double consumed;
+		bool visited;
 	};
 
 	std::vector<Node> nodes;
@@ -34,11 +35,22 @@ public:
 
 	bool IsEdge(const long row, const long col) const;
 	void SetEdge(const long row, const long col, const bool edge = true);
-	void RemoveEdge(const long row, const long col);
 	long GetEdgeCount() const;
-	long GetComponentCount() const;
-	double GetAveragePowerPercentageSupplied() const;
 	void CutEdges(const double percent);
+
+	using component_t = std::vector<long>;
+	std::vector<component_t> GetComponents_BFS();
+	std::vector<component_t> GetComponents_DFS();
+
+	struct GraphAnalytics
+	{
+		long num_components;
+		long num_edges;
+		long num_nodes;
+		long num_components_powered;
+		double avg_power_percentage;
+	};
+	GraphAnalytics RunAnalytics();
 
 	void Write(const std::string& filename) const;
 };
