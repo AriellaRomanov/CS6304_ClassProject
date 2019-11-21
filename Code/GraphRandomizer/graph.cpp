@@ -167,7 +167,9 @@ void Graph::CutEdges(const double percent)
 				edge_list.emplace_back(row, col);
 
 	long edge_count = static_cast<long>(edge_list.size());
-	long cut_count = max(1, edge_count * percent);
+	long cut_count = edge_count * percent;
+	if (cut_count < 1)
+		cut_count = 1;
 
 	for (int i = 0; i < cut_count; i++)
 	{
