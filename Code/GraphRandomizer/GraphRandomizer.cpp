@@ -126,7 +126,7 @@ void DoGraphStressTest()
 				main_graph.CutEdges(edge_cut_percent);
 				graph_data = main_graph.RunAnalytics();
 				std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
-				std::cout << "  Component Count: " << graph_data.num_components << std::endl;
+				std::cout << "  Component Count: " << graph_data.num_components << "[" << graph_data.num_components - graph_data.num_components_powered << " components are under-powered]" << std::endl;
 				std::cout << "  Edge Count: " << graph_data.num_edges << std::endl;
 			}
 
