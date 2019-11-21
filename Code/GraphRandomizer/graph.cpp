@@ -13,7 +13,8 @@ Graph::Node::Node(const long _produced, const long _consumed)
 	consumed(_consumed),
 	visited(false)
 {
-
+	if (consumed <= 0)
+		consumed = 0.000001;
 }
 
 Graph::Node::Node(const Node& copy)
@@ -257,7 +258,7 @@ Graph::GraphAnalytics Graph::RunAnalytics()
 		}
 		if (produced >= consumed)
 			data.num_components_powered++;
-		data.avg_power_percentage += (consumed / produced);
+		data.avg_power_percentage += (produced / consumed);
 	}
 	data.avg_power_percentage /= static_cast<double>(components.size());
 
