@@ -181,6 +181,7 @@ void Graph::CutEdges(const double percent)
 
 std::vector<Graph::component_t> Graph::GetComponents_BFS()
 {
+	Log("Start -> Graph::GetComponents_BFS");
 	for (auto& n : nodes)
 		n.visited = false;
 
@@ -209,6 +210,7 @@ std::vector<Graph::component_t> Graph::GetComponents_BFS()
 		};
 		visit(start_node);
 
+		Log("Queueing...");
 		while (static_cast<long>(queue.size()) > 0)
 		{
 			auto current_node = queue.front();
@@ -220,10 +222,12 @@ std::vector<Graph::component_t> Graph::GetComponents_BFS()
 					visit(i);
 			}
 		}
+		Log("Queueing Complete.");
 
 		if (static_cast<long>(component.size()) > 0)
 			component_list.push_back(component);
 	}
+	Log("End -> Graph::GetComponents_BFS");
 	return component_list;
 }
 
@@ -237,9 +241,13 @@ Graph::GraphAnalytics Graph::RunAnalytics()
 	GraphAnalytics data;
 
 	auto components = GetComponents_BFS();
+	Log("A");
 	data.num_components = components.size();
+	Log("B");
 	data.num_nodes = nodes.size();
+	Log("C");
 	data.num_edges = GetEdgeCount();
+	Log("D");
 
 	data.num_components_powered = 0;
 	data.avg_power_percentage = 0;
