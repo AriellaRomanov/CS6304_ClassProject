@@ -323,7 +323,7 @@ std::vector<std::string> split(std::string value, const std::string& delim, long
 
 void Log(const std::string& message)
 {
-	std::cout << message << std::endl;
+	std::cout << "[LOG] " << message << std::endl;
 
 	std::ofstream file("runtime.log");
 	if (!file.is_open())

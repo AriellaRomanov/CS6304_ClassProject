@@ -95,6 +95,8 @@ void DoGraphStressTest()
 
 	if (HasRequiredConfiguration(required_keys))
 	{
+		Log("DoGraphStressTest Function: Has required keys.");
+
 		std::string graph_file = GetConfigString("GraphFilename");
 		double power_threshold = GetConfigValue("PowerSuppliedThreshold");
 		double edge_cut_percent = GetConfigValue("PercentageOfEdgesToCut");
@@ -105,8 +107,11 @@ void DoGraphStressTest()
 			Log("Cannot do operation with PercentageOfEdgesToCut <= 0 or PercentageOfEdgesToCut > 1");
 		else
 		{
+			Log("DoGraphStressTest Function: Reading graph.");
 			Graph main_graph(graph_file);
+			Log("DoGraphStressTest Function: Running initial analytics....");
 			auto graph_data = main_graph.RunAnalytics();
+			Log("DoGraphStressTest Function: Analytics complete.");
 			long starting_edges = graph_data.num_edges;
 			long starting_components = graph_data.num_components;
 			long starting_power_supplied = graph_data.avg_power_percentage;
@@ -120,7 +125,9 @@ void DoGraphStressTest()
 				std::cout << "Iteration: " << ++iteration << std::endl;
 				main_graph.CutEdges(edge_cut_percent);
 				std::cout << "  CutEdges(" << edge_cut_percent << ")" << std::endl;
+				Log("DoGraphStressTest Function: Running initial analytics....");
 				graph_data = main_graph.RunAnalytics();
+				Log("DoGraphStressTest Function: Analytics complete.");
 				std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
 				std::cout << "  Component Count: " << graph_data.num_components << std::endl;
 			}
