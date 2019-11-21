@@ -114,10 +114,15 @@ void DoGraphStressTest()
 			bool stop_conditions_met = false;
 			double power_supplied = power_threshold;
 
-			while (graph_data.avg_power_percentage > power_threshold)
+			long iteration = 0;
+			while (graph_data.avg_power_percentage > power_threshold && graph_data.num_edges > 0)
 			{
+				std::cout << "Iteration: " << ++iteration << std::endl;
 				main_graph.CutEdges(edge_cut_percent);
+				std::cout << "  CutEdges(" << edge_cut_percent << ")" << std::endl;
 				graph_data = main_graph.RunAnalytics();
+				std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
+				std::cout << "  Component Count: " << graph_data.num_components << std::endl;
 			}
 
 			Log("Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
