@@ -201,7 +201,7 @@ std::vector<Graph::component_t> Graph::GetComponents_BFS()
 
 		// BFS
 		std::queue<long> queue;
-		auto visit = [this](node_id)
+		auto visit = [&](const long node_id)
 		{
 			nodes.at(node_id).visited = true;
 			queue.push(node_id);
