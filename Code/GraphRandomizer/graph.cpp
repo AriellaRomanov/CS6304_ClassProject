@@ -1,6 +1,7 @@
 #include "graph.h"
 #include <queue>
 #include <string>
+#include <errno.h>
 
 Graph::Node::Node()
 	: produced(0),
