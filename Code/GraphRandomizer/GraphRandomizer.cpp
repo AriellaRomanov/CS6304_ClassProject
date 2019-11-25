@@ -68,7 +68,7 @@ void RandomizeGraph()
 			Log("Must start from a single component graph!");
 			return;
 		}
-		num_swaps = 50 * graph_data.num_edges;
+		auto num_swaps = 50 * graph_data.num_edges;
 
 		for (int i = 0; i < num_generations; i++)
 		{
