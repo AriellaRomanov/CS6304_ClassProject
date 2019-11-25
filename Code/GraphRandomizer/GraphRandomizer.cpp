@@ -62,7 +62,7 @@ void RandomizeGraph()
 		std::string output_directory = GetConfigString("OutputDirectory");
 
 		Graph main_graph(graph_file);
-		main_graph.RunAnalytics(1);
+		auto graph_data = main_graph.RunAnalytics(1);
 		if (graph_data.num_components != 1)
 		{
 			Log("Must start from a single component graph!");
@@ -75,7 +75,7 @@ void RandomizeGraph()
 			Graph sub_graph(main_graph);
 			sub_graph.RandomizeEdges(num_swaps);
 			
-			auto graph_data = sub_graph.RunAnalytics(1);
+			graph_data = sub_graph.RunAnalytics(1);
 			if (graph_data.num_components == 1)
 				sub_graph.Write(output_directory + "/random" + std::to_string(i) + ".graph");
 			else
