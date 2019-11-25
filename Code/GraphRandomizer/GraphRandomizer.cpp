@@ -5,6 +5,7 @@
 #include <time.h>
 #include <random>
 #include <iostream>
+#include <string>
 
 #include "graph.h"
 
@@ -104,10 +105,10 @@ void TestGraph()
 		Log("TestGraph Function: Running initial analytics....");
 		auto graph_data = main_graph.RunAnalytics();
 		Log("TestGraph Function: Analytics complete.");
-		Log(_cat("Average Power Percentage: ", graph_data.avg_power_percentage));
-		Log(_cat("Component Count: ", graph_data.num_components));
-		Log(_cat("Powered Components: ", graph_data.num_components_powered));
-		Log(_cat("Edge Count: ", graph_data.num_edges));
+		Log("Average Power Percentage: " + std::to_string(graph_data.avg_power_percentage));
+		Log("Component Count: " + std::to_string(graph_data.num_components));
+		Log("Powered Components: " + std::to_string(graph_data.num_components_powered));
+		Log("Edge Count: " + std::to_string(graph_data.num_edges));
 	}
 
 	return;
