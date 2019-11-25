@@ -189,7 +189,7 @@ void Graph::CutEdges(const double percent)
 	}
 }
 
-std::vector<Graph::component_t> Graph::GetComponents_BFS()
+std::vector<Graph::component_t> Graph::GetComponents_BFS(const long max_components)
 {
 	for (auto& n : nodes)
 		n.visited = false;
@@ -233,21 +233,24 @@ std::vector<Graph::component_t> Graph::GetComponents_BFS()
 
 		if (static_cast<long>(component.size()) > 0)
 			component_list.push_back(component);
+
 		start_node = get_next_start_node();
+		if (max_components > 0 && static_cast<long>(component_list.size()) > max_components)
+			start_node = -1;
 	}
 	return component_list;
 }
 
-std::vector<Graph::component_t> Graph::GetComponents_DFS()
+std::vector<Graph::component_t> Graph::GetComponents_DFS(const long max_components)
 {
-	return GetComponents_BFS();
+	return GetComponents_BFS(max_components);
 }
 
-Graph::GraphAnalytics Graph::RunAnalytics()
+Graph::GraphAnalytics Graph::RunAnalytics(const long max_components)
 {
 	GraphAnalytics data;
 
-	auto components = GetComponents_BFS();
+	auto components = GetComponents_BFS(max_components);
 	data.num_components = components.size();
 	data.num_nodes = nodes.size();
 	data.num_edges = GetEdgeCount();

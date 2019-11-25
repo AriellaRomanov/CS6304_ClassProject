@@ -39,8 +39,8 @@ public:
 	void CutEdges(const double percent);
 
 	using component_t = std::vector<long>;
-	std::vector<component_t> GetComponents_BFS();
-	std::vector<component_t> GetComponents_DFS();
+	std::vector<component_t> GetComponents_BFS(const long max_components = -1);
+	std::vector<component_t> GetComponents_DFS(const long max_components = -1);
 
 	struct GraphAnalytics
 	{
@@ -50,7 +50,7 @@ public:
 		long num_components_powered;
 		double avg_power_percentage;
 	};
-	GraphAnalytics RunAnalytics();
+	GraphAnalytics RunAnalytics(const long max_components = -1);
 
 	void Write(const std::string& filename) const;
 };

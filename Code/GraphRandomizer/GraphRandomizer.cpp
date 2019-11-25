@@ -50,37 +50,39 @@ void RandomizeGraph()
 	Log("RandomizeGraph Function Called.");
 
 	std::vector<std::string> required_keys{
-		"NumberEdgeSwaps",
 		"NumberGraphsGenerated",
 		"GraphFilename",
-		"OutputDirectory",
-		"RandomizeNodes",
-		"MinNodeProduction",
-		"MaxNodeProduction",
-		"MinNodeConsumption",
-		"MaxNodeConsumption"
+		"OutputDirectory"
 	};
 
 	if (HasRequiredConfiguration(required_keys))
 	{
-		long num_swaps = GetConfigValue("NumberEdgeSwaps");
 		long num_generations = GetConfigValue("NumberGraphsGenerated");
-		long do_nodes = GetConfigValue("RandomizeNodes");
-		long min_prod = GetConfigValue("MinNodeProduction");
-		long max_prod = GetConfigValue("MaxNodeProduction");
-		long min_cons = GetConfigValue("MinNodeConsumption");
-		long max_cons = GetConfigValue("MaxNodeConsumption");
 		std::string graph_file = GetConfigString("GraphFilename");
 		std::string output_directory = GetConfigString("OutputDirectory");
 
 		Graph main_graph(graph_file);
+		main_graph.RunAnalytics(1);
+		if (graph_data.num_components != 1)
+		{
+			Log("Must start from a single component graph!");
+			return;
+		}
+		num_swaps = 50 * graph_data.num_edges;
+
 		for (int i = 0; i < num_generations; i++)
 		{
 			Graph sub_graph(main_graph);
 			sub_graph.RandomizeEdges(num_swaps);
-			if (do_nodes)
-				sub_graph.RandomizeNodes(min_prod, max_prod, min_cons, max_cons);
-			sub_graph.Write(output_directory + "/random" + std::to_string(i) + ".graph");
+			
+			auto graph_data = sub_graph.RunAnalytics(1);
+			if (graph_data.num_components == 1)
+				sub_graph.Write(output_directory + "/random" + std::to_string(i) + ".graph");
+			else
+			{
+				Log("Graph discarded: multiple components");
+				i--;
+			}
 		}
 	}
 
@@ -111,6 +113,7 @@ void TestGraph()
 		Log("Edge Count: " + std::to_string(graph_data.num_edges));
 	}
 
+	Log("TestGraph Function Complete.");
 	return;
 }
 
