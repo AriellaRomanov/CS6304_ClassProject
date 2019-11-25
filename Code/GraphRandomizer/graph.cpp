@@ -91,7 +91,10 @@ Graph::Graph(const std::string& filename)
 			nodes.emplace_back(produced, consumed);
 
 			for (int j = 2; j < _size; j++)
-				SetEdge(i, stoi(components.at(j)));
+			{
+				if (components.at(j) != "")
+					SetEdge(i, stoi(components.at(j)));
+			}
 		}
 	}
 }
