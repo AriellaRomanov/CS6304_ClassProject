@@ -15,6 +15,7 @@ double GetConfigValue(const std::string& key);
 std::string GetConfigString(const std::string& key);
 
 void RandomizeGraph();
+void TestGraph();
 void DoGraphStressTest();
 bool HasRequiredConfiguration(const std::vector<std::string>& keys);
 
@@ -32,6 +33,8 @@ int main(int argc, char** argv)
 		{
 			if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Randomize")
 				RandomizeGraph();
+			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Test")
+				TestGraph();
 			else
 				DoGraphStressTest();
 		}
@@ -81,6 +84,33 @@ void RandomizeGraph()
 	}
 
 	Log("RandomizeGraph Function Complete.");
+}
+
+void TestGraph()
+{
+	Log("TestGraph Function Called.");
+
+	std::vector<std::string> required_keys{
+		"GraphFilename"
+	};
+
+	if (HasRequiredConfiguration(required_keys))
+	{
+		Log("DoGraphStressTest Function: Has required keys.");
+
+		std::string graph_file = GetConfigString("GraphFilename");
+		Log("TestGraph Function: Reading graph.");
+		Graph main_graph(graph_file);
+		Log("TestGraph Function: Running initial analytics....");
+		auto graph_data = main_graph.RunAnalytics();
+		Log("TestGraph Function: Analytics complete.");
+		Log(_cat("Average Power Percentage: ", graph_data.avg_power_percentage));
+		Log(_cat("Component Count: ", graph_data.num_components));
+		Log(_cat("Powered Components: ", graph_data.num_components_powered));
+		Log(_cat("Edge Count: ", graph_data.num_edges));
+	}
+
+	return;
 }
 
 void DoGraphStressTest()
