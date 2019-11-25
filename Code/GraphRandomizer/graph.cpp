@@ -2,6 +2,8 @@
 #include <queue>
 #include <string>
 #include <errno.h>
+#include <stdio.h>
+#include <cstring>
 
 Graph::Node::Node()
 	: produced(0),
@@ -56,7 +58,9 @@ Graph::Graph(const std::string& filename)
 {
 	std::ifstream file(filename);
 	if (!file.is_open())
-		Log("Unable to read graph file: " + filename + "[" + std::to_string(strerror(errno)) + "]");
+	{
+		Log("Unable to read graph file: " + filename + "[" + std::to_string(std::strerror(errno)) + "]");
+	}
 	else
 	{
 		std::vector<std::string> lines;
