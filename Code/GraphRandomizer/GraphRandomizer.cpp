@@ -72,6 +72,7 @@ void RandomizeGraph()
 
 		for (int i = 0; i < num_generations; i++)
 		{
+			Log("Creating graph #" + std::to_string(i));
 			Graph sub_graph(main_graph);
 			sub_graph.RandomizeEdges(num_swaps);
 			
