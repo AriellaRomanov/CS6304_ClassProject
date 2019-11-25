@@ -58,9 +58,7 @@ Graph::Graph(const std::string& filename)
 {
 	std::ifstream file(filename);
 	if (!file.is_open())
-	{
 		Log("Unable to read graph file: " + filename + "[" + std::string(std::strerror(errno)) + "]");
-	}
 	else
 	{
 		std::vector<std::string> lines;
