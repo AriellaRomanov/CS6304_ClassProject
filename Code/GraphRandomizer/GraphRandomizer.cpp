@@ -18,7 +18,7 @@ std::string GetConfigString(const std::string& key);
 
 void RandomizeGraph();
 void TestGraph();
-void GraphStressTest(const std::string& filename, const double power_threshold, const double edge_percentage);
+void GraphStressTest(const std::string& graph_file, const double power_threshold, const double edge_percentage);
 void BatchStressTest();
 void DoGraphStressTest();
 bool HasRequiredConfiguration(const std::vector<std::string>& keys);
@@ -121,7 +121,7 @@ void TestGraph()
 	return;
 }
 
-void GraphStressTest(const std::string& filename, const double power_threshold, const double edge_percentage)
+void GraphStressTest(const std::string& graph_file, const double power_threshold, const double edge_percentage)
 {
 	Log("GraphStressTest Function: Reading graph: " + filename);
 	Graph main_graph(graph_file);
