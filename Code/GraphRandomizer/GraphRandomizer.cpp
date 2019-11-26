@@ -123,7 +123,7 @@ void TestGraph()
 
 void GraphStressTest(const std::string& graph_file, const double power_threshold, const double edge_percentage)
 {
-	Log("GraphStressTest Function: Reading graph: " + filename);
+	Log("GraphStressTest Function: Reading graph: " + graph_file);
 	Graph main_graph(graph_file);
 	Log("    GraphStressTest Function: Running initial analytics....");
 	auto graph_data = main_graph.RunAnalytics();
