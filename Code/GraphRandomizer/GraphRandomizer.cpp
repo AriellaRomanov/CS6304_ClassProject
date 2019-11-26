@@ -6,6 +6,7 @@
 #include <random>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 #include "graph.h"
 
@@ -17,6 +18,8 @@ std::string GetConfigString(const std::string& key);
 
 void RandomizeGraph();
 void TestGraph();
+void GraphStressTest(const std::string& filename, const double power_threshold, const double edge_percentage);
+void BatchStressTest();
 void DoGraphStressTest();
 bool HasRequiredConfiguration(const std::vector<std::string>& keys);
 
@@ -118,6 +121,70 @@ void TestGraph()
 	return;
 }
 
+void GraphStressTest(const std::string& filename, const double power_threshold, const double edge_percentage)
+{
+	Log("GraphStressTest Function: Reading graph: " + filename);
+	Graph main_graph(graph_file);
+	Log("    GraphStressTest Function: Running initial analytics....");
+	auto graph_data = main_graph.RunAnalytics();
+	Log("    GraphStressTest Function: Analytics complete.");
+	long starting_edges = graph_data.num_edges;
+	long starting_components = graph_data.num_components;
+	long starting_power_supplied = graph_data.avg_power_percentage;
+
+	bool stop_conditions_met = false;
+	double power_supplied = power_threshold;
+
+	long iteration = 0;
+	while (graph_data.avg_power_percentage > power_threshold && graph_data.num_edges > 0)
+	{
+		std::cout << "        Iteration: " << ++iteration << std::endl;
+		main_graph.CutEdges(edge_percentage);
+		graph_data = main_graph.RunAnalytics();
+		//std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
+		//std::cout << "  Component Count: " << graph_data.num_components << "[" << graph_data.num_components - graph_data.num_components_powered << " components are under-powered]" << std::endl;
+		//std::cout << "  Edge Count: " << graph_data.num_edges << std::endl;
+	}
+
+	Log("    Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
+	Log("    Ending component count: " + std::to_string(graph_data.num_components) + " (of " + std::to_string(starting_components) + ")");
+	Log("    Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied * 100) + "%)");
+
+	std::string output_graph = graph_file + ".output";
+	main_graph.Write(output_graph);
+	Log("    Ending graph written to: " + output_graph);
+}
+
+void BatchStressTest()
+{
+	Log("BatchStressTest Function Called.");
+
+	std::vector<std::string> required_keys{
+		"Directory",
+		"PowerSuppliedThreshold",
+		"PercentageOfEdgesToCut"
+	};
+
+	if (HasRequiredConfiguration(required_keys))
+	{
+		std::string directory = GetConfigString("Directory");
+		double power_threshold = GetConfigValue("PowerSuppliedThreshold");
+		double edge_cut_percent = GetConfigValue("PercentageOfEdgesToCut");
+
+		if (power_threshold < 0 || power_threshold > 1)
+			Log("Cannot do operation with PowerSuppliedThreshold < 0 or PowerSuppliedThreshold > 1");
+		else if (edge_cut_percent <= 0 || edge_cut_percent > 1)
+			Log("Cannot do operation with PercentageOfEdgesToCut <= 0 or PercentageOfEdgesToCut > 1");
+		else
+		{
+			for (const auto & entry : std::filesystem::directory_iterator(directory))
+				GraphStressTest(entry.path(), power_threshold, edge_cut_percent);
+		}
+	}
+
+	Log("BatchStressTest Function Complete.");
+}
+
 void DoGraphStressTest()
 {
 	Log("DoGraphStressTest Function Called.");
@@ -142,36 +209,7 @@ void DoGraphStressTest()
 			Log("Cannot do operation with PercentageOfEdgesToCut <= 0 or PercentageOfEdgesToCut > 1");
 		else
 		{
-			Log("DoGraphStressTest Function: Reading graph.");
-			Graph main_graph(graph_file);
-			Log("DoGraphStressTest Function: Running initial analytics....");
-			auto graph_data = main_graph.RunAnalytics();
-			Log("DoGraphStressTest Function: Analytics complete.");
-			long starting_edges = graph_data.num_edges;
-			long starting_components = graph_data.num_components;
-			long starting_power_supplied = graph_data.avg_power_percentage;
-
-			bool stop_conditions_met = false;
-			double power_supplied = power_threshold;
-
-			long iteration = 0;
-			while (graph_data.avg_power_percentage > power_threshold && graph_data.num_edges > 0)
-			{
-				std::cout << "Iteration: " << ++iteration << std::endl;
-				main_graph.CutEdges(edge_cut_percent);
-				graph_data = main_graph.RunAnalytics();
-				std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
-				std::cout << "  Component Count: " << graph_data.num_components << "[" << graph_data.num_components - graph_data.num_components_powered << " components are under-powered]" << std::endl;
-				std::cout << "  Edge Count: " << graph_data.num_edges << std::endl;
-			}
-
-			Log("Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
-			Log("Ending component count: " + std::to_string(graph_data.num_components) + " (of " + std::to_string(starting_components) + ")");
-			Log("Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied * 100) + "%)");
-			
-			std::string output_graph = graph_file + ".output";
-			main_graph.Write(output_graph);
-			Log("Ending graph written to: " + output_graph);
+			GraphStressTest(graph_file, power_threshold, edge_cut_percent);
 		}
 	}
 
