@@ -268,7 +268,10 @@ Graph::GraphAnalytics Graph::RunAnalytics(const long max_components)
 		}
 		if (produced >= consumed)
 			data.num_components_powered++;
-		data.avg_power_percentage += (produced / consumed);
+		double power_percentage = (produced / consumed);
+		if (power_percentage > 1)
+			power_percentage = 1;
+		data.avg_power_percentage += power_percentage;
 	}
 	data.avg_power_percentage /= static_cast<double>(components.size());
 
