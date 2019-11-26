@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Test")
 				TestGraph();
 			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "BatchStress")
-				TestGraph();
+				BatchStressTest();
 			else
 				DoGraphStressTest();
 		}
