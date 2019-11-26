@@ -26,7 +26,6 @@ bool HasRequiredConfiguration(const std::vector<std::string>& keys);
 config_t configuration;
 int main(int argc, char** argv)
 {
-	std::cout << "Program Start." << std::endl;
 	srand(time(NULL));
 
 	if (argc < 2)
@@ -45,8 +44,6 @@ int main(int argc, char** argv)
 				DoGraphStressTest();
 		}
 	}
-
-	std::cout << "Program Done." << std::endl;
 	return 0;
 }
 
