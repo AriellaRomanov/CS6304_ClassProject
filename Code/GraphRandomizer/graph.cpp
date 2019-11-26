@@ -340,14 +340,14 @@ std::vector<std::string> split(std::string value, const std::string& delim, long
 
 void Log(const std::string& message)
 {
-	std::cout << "[LOG] " << message << std::endl;
+	//std::cout << message << std::endl;
 
-	std::ofstream file("runtime.log");
-	if (!file.is_open())
-		std::cout << "Unable access log file." << std::endl;
-	else
-	{
-		file << message << std::endl;
-		file.close();
-	}
+	//std::ofstream file("runtime.log");
+	//if (!file.is_open())
+	//	std::cout << "Unable access log file." << std::endl;
+	//else
+	//{
+	//	file << message << std::endl;
+	//	file.close();
+	//}
 }

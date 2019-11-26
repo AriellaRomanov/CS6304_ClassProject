@@ -97,20 +97,14 @@ void RandomizeGraph()
 
 void TestGraph()
 {
-	Log("TestGraph Function Called.");
-
 	std::vector<std::string> required_keys{
 		"GraphFilename"
 	};
 
 	if (HasRequiredConfiguration(required_keys))
 	{
-		Log("DoGraphStressTest Function: Has required keys.");
-
 		std::string graph_file = GetConfigString("GraphFilename");
-		Log("TestGraph Function: Reading graph.");
 		Graph main_graph(graph_file);
-		Log("TestGraph Function: Running initial analytics....");
 		auto graph_data = main_graph.RunAnalytics();
 		Log("TestGraph Function: Analytics complete.");
 		Log("Average Power Percentage: " + std::to_string(graph_data.avg_power_percentage));
@@ -119,7 +113,6 @@ void TestGraph()
 		Log("Edge Count: " + std::to_string(graph_data.num_edges));
 	}
 
-	Log("TestGraph Function Complete.");
 	return;
 }
 
@@ -140,27 +133,20 @@ void GraphStressTest(const std::string& graph_file, const double power_threshold
 	long iteration = 0;
 	while (graph_data.avg_power_percentage > power_threshold && graph_data.num_edges > 0)
 	{
-		std::cout << "        Iteration: " << ++iteration << std::endl;
 		main_graph.CutEdges(edge_percentage);
 		graph_data = main_graph.RunAnalytics();
-		//std::cout << "  RunAnalytics() :: " << graph_data.avg_power_percentage << " > " << power_threshold << " = " << (graph_data.avg_power_percentage > power_threshold) << std::endl;
-		//std::cout << "  Component Count: " << graph_data.num_components << "[" << graph_data.num_components - graph_data.num_components_powered << " components are under-powered]" << std::endl;
-		//std::cout << "  Edge Count: " << graph_data.num_edges << std::endl;
 	}
+
+	std::cout << graph_file << ',' << graph_data.num_nodes << ',' << starting_edges << ',' << graph_data.num_edges << ',' << graph_data.num_components
+		<< ',' << graph_data.num_components_powered << ',' << graph_data.avg_power_percentage << std::endl;
 
 	Log("    Number of edges cut: " + std::to_string(starting_edges - graph_data.num_edges) + " (of " + std::to_string(starting_edges) + ")");
 	Log("    Ending component count: " + std::to_string(graph_data.num_components) + " (of " + std::to_string(starting_components) + ")");
 	Log("    Ending average percentage power supplied: " + std::to_string(power_supplied * 100) + "% (from " + std::to_string(starting_power_supplied * 100) + "%)");
-
-	std::string output_graph = graph_file + ".output";
-	main_graph.Write(output_graph);
-	Log("    Ending graph written to: " + output_graph);
 }
 
 void BatchStressTest()
 {
-	Log("BatchStressTest Function Called.");
-
 	std::vector<std::string> required_keys{
 		"Directory",
 		"PowerSuppliedThreshold",
@@ -183,14 +169,10 @@ void BatchStressTest()
 				GraphStressTest(entry.path(), power_threshold, edge_cut_percent);
 		}
 	}
-
-	Log("BatchStressTest Function Complete.");
 }
 
 void DoGraphStressTest()
 {
-	Log("DoGraphStressTest Function Called.");
-
 	std::vector<std::string> required_keys{
 		"GraphFilename",
 		"PowerSuppliedThreshold",
@@ -199,8 +181,6 @@ void DoGraphStressTest()
 
 	if (HasRequiredConfiguration(required_keys))
 	{
-		Log("DoGraphStressTest Function: Has required keys.");
-
 		std::string graph_file = GetConfigString("GraphFilename");
 		double power_threshold = GetConfigValue("PowerSuppliedThreshold");
 		double edge_cut_percent = GetConfigValue("PercentageOfEdgesToCut");
@@ -214,8 +194,6 @@ void DoGraphStressTest()
 			GraphStressTest(graph_file, power_threshold, edge_cut_percent);
 		}
 	}
-
-	Log("DoGraphStressTest Function Complete.");
 }
 
 bool HasRequiredConfiguration(const std::vector<std::string>& keys)
