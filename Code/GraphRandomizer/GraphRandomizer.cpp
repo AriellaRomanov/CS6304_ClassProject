@@ -39,6 +39,8 @@ int main(int argc, char** argv)
 				RandomizeGraph();
 			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "Test")
 				TestGraph();
+			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "BatchStress")
+				TestGraph();
 			else
 				DoGraphStressTest();
 		}
