@@ -1,2 +1,2 @@
 main:
-	g++ *.cpp -g -o driver
+	g++ -std=c++17 -lstdc++fs *.cpp -g -o driver
