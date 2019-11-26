@@ -6,7 +6,7 @@
 #include <random>
 #include <iostream>
 #include <string>
-#include <filesystem>
+#include <experimental/filesystem>
 
 #include "graph.h"
 
@@ -177,7 +177,7 @@ void BatchStressTest()
 			Log("Cannot do operation with PercentageOfEdgesToCut <= 0 or PercentageOfEdgesToCut > 1");
 		else
 		{
-			for (const auto & entry : std::filesystem::directory_iterator(directory))
+			for (const auto & entry : std::experimental::filesystem::directory_iterator(directory))
 				GraphStressTest(entry.path(), power_threshold, edge_cut_percent);
 		}
 	}
