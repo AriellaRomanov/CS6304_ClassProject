@@ -21,6 +21,7 @@ void TestGraph();
 void GraphStressTest(const std::string& graph_file, const double power_threshold, const double edge_percentage);
 void BatchStressTest();
 void DoGraphStressTest();
+void PrintEdgeList();
 bool HasRequiredConfiguration(const std::vector<std::string>& keys);
 
 config_t configuration;
@@ -40,6 +41,8 @@ int main(int argc, char** argv)
 				TestGraph();
 			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "BatchStress")
 				BatchStressTest();
+			else if (DoesConfigKeyExist("ProgramMethod") && GetConfigString("ProgramMethod") == "PrintEdgeList")
+				PrintEdgeList();
 			else
 				DoGraphStressTest();
 		}
@@ -190,6 +193,23 @@ void DoGraphStressTest()
 		{
 			GraphStressTest(graph_file, power_threshold, edge_cut_percent);
 		}
+	}
+}
+
+void PrintEdgeList()
+{
+	std::vector<std::string> required_keys{
+		"GraphFilename",
+		"OutputFilename"
+	};
+
+	if (HasRequiredConfiguration(required_keys))
+	{
+		std::string graph_file = GetConfigString("GraphFilename");
+		std::string output_file = GetConfigString("OutputFilename");
+
+		Graph main_graph(graph_file);
+		main_graph.PrintEdges(output_file);
 	}
 }
 

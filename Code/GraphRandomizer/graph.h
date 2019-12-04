@@ -52,5 +52,6 @@ public:
 	};
 	GraphAnalytics RunAnalytics(const long max_components = -1);
 
+	void PrintEdges(const std::string& filename) const;
 	void Write(const std::string& filename) const;
 };
