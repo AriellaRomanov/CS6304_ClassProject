@@ -278,6 +278,21 @@ Graph::GraphAnalytics Graph::RunAnalytics(const long max_components)
 	return data;
 }
 
+void Graph::PrintEdges(const std::string& filename) const
+{
+	std::ofstream file(filename.c_str());
+	if (!file.is_open())
+		Log("Unable to open file to write graph: " + filename);
+	else
+	{
+		for (int row = 0; row < static_cast<long>(edges.size()); row++)
+			for (int col = 0; col < static_cast<long>(edges.at(row).size()); col++)
+				if (edges.at(row).at(col))
+					file << row << " " << col << std::endl;
+		file.close();
+	}
+}
+
 void Graph::Write(const std::string& filename) const
 {
 	std::cout << "Writing..." << std::endl;
@@ -309,6 +324,7 @@ void Graph::Write(const std::string& filename) const
 			if (n < size - 1)
 				file << "\n";
 		}
+		file.close();
 	}
 
 	std::cout << "Done writing" << std::endl;
